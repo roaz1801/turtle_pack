@@ -1,0 +1,5 @@
+
+<launch>
+    <!-- Initialiserer servicen, men kjører den ikke-->
+    <node pkg="object_detection" type="move_square_service" name="move_square_service" output="screen"/>
+</launch>

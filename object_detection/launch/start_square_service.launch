@@ -1,0 +1,6 @@
+<launch>
+    <!-- Initialiserer og kjører servicen-->
+    <include file="$(find object_detection)/launch/start_square.launch"/>
+
+    <node pkg="object_detection" type="move_square_client" name="move_square_client" output="screen"/>
+</launch>

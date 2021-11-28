@@ -1,0 +1,4 @@
+<launch>
+    <!-- My Package launch file -->
+    <node pkg="pub_sub_tutorial" type="edited_topic_publisher" name="Edited_pub" output="screen"/>
+</launch>

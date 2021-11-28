@@ -1,0 +1,4 @@
+float64 radius #Distans for hver side av square
+int32 repetitions #Antall ganger robot skal bevege seg i square.
+---
+bool success
