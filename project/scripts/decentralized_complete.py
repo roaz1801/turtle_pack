@@ -59,7 +59,7 @@ class move_bot:
         angle_of_view = 60 #Horizonal FoV of the Raspberry Pi
 
         #Wait for first message from callbacks. 
-        rospy.wait_for_message("tb3_1/scan",LaserScan)
+        #rospy.wait_for_message("tb3_1/scan",LaserScan)
 
         #Boundary and tuning parameters
         d_con = 2.8 #Length where camera stops detecting marker
@@ -68,10 +68,6 @@ class move_bot:
         K_beta = 0.7
         rho_d_inf = 0.4 #Steady state error on distance
         rho_beta_inf = 15 #Steady state error on angle
-
-
-        print(d)
-        print(beta)
 
         d_desired = 0.75
         d_col = 0.2*d_desired
@@ -132,6 +128,9 @@ class move_bot:
             temp_w = K_beta*(1/rho_beta)*r_beta*epsilon_beta
             self.v = 0.3*self.temp_store_v[-1]+0.7*temp_v
             self.w = 0.3*self.temp_store_w[-1]+0.7*temp_w
+            if len(self.temp_store_v) >= 2:
+                self.v = 0.1*self.temp_store_v[-2]+0.2*self.temp_store_v[-1]+0.7*temp_v
+                self.w = 0.1*self.temp_store_w[-2]+0.2*self.temp_store_w[-1]+0.7*temp_w
             if len(self.temp_store_v) >= 3:
                 del self.temp_store_v[0:-3]
         else:
@@ -183,7 +182,7 @@ class move_bot:
 
         
 if __name__ == '__main__':
-    rospy.init_node("decentralized_follow",disable_signals=True)
+    rospy.init_node("decentralized_complete")
     rate = rospy.Rate(135) #Loop rate 100Hz
     obj = move_bot()
 

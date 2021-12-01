@@ -94,7 +94,7 @@ class move_bot:
         #n =
         print("Original N:",self.marker_center[1])
         Y = h 
-        Z = self.lidar_dist
+        Z = np.cos(np.deg2rad(self.lidar_angle))*self.lidar_dist
         X = -np.sin(np.deg2rad(self.lidar_angle))*self.lidar_dist
         print("Sin:",np.sin(np.deg2rad(self.lidar_angle)))
 
@@ -235,7 +235,7 @@ class move_bot:
 
 
 if __name__ == '__main__':
-    rospy.init_node("vision_follow")
+    rospy.init_node("vision_lidar")
     rate = rospy.Rate(135) #Loop rate 
     obj = move_bot()
 
@@ -280,7 +280,7 @@ if __name__ == '__main__':
             delT = currentTime-prevTime
 
             #Get information about the position of marker in relation to the camera
-            h = trans_camera_frame.transform.translation.y 
+            h = -0.06#trans_camera_frame.transform.translation.y 
  
             obj.control(h,delT.to_sec())
 

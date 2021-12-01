@@ -214,7 +214,7 @@ if __name__ == '__main__':
             delT = currentTime-prevTime
 
             #Get information about the position of marker in relation to the camera
-            h = trans_camera_frame.transform.translation.y 
+            h = -0.06#trans_camera_frame.transform.translation.y 
 
             obj.control(h,delT.to_sec())
 

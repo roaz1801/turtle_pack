@@ -1,0 +1,5 @@
+<launch>
+  <node name="vision_lidar" pkg="project" type="vision_lidar_only.py"/>
+  <node name="position_plotter" pkg="project" type="plotter.py"/>
+  <node name="simple_follow" pkg="project" type="simple_follow.py"/>
+</launch>

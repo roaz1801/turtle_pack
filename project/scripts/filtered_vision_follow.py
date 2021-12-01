@@ -193,7 +193,7 @@ class move_bot:
 
 
 if __name__ == '__main__':
-    rospy.init_node("vision_follow",disable_signals=True)
+    rospy.init_node("vision_filter",disable_signals=True)
     rate = rospy.Rate(135) #Loop rate 100Hz
     obj = move_bot()
 
@@ -236,7 +236,7 @@ if __name__ == '__main__':
             #dt
             delT = currentTime-prevTime
 
-            h = trans_camera_frame.transform.translation.y 
+            h = -0.06#trans_camera_frame.transform.translation.y 
 
             distance = np.sqrt((0-trans.transform.translation.x)**2+(0-trans.transform.translation.y)**2)
             rads = np.arctan(-trans.transform.translation.y/-trans.transform.translation.x)

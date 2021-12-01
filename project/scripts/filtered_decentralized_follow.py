@@ -140,7 +140,7 @@ class move_bot:
         #self.iter += 1
 
 if __name__ == '__main__':
-    rospy.init_node("decentralized_follow",disable_signals=True)
+    rospy.init_node("decentralized_filter",disable_signals=True)
     rate = rospy.Rate(135) #Loop rate 100Hz
     obj = move_bot()
 
