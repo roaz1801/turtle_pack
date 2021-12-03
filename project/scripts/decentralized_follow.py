@@ -5,7 +5,7 @@ import math
 import tf2_ros
 import numpy as np
 import matplotlib.pyplot as plt
-
+import csv
 
 class move_bot:
     def __init__(self):
@@ -38,8 +38,8 @@ class move_bot:
         #Placeholder values, disse må testes og justeres
         d_con = 2.8 #Lengde der kamera slutter å merke marker, må finne og justere denne.
         l = 0.1
-        K_d = 0.25
-        K_beta = 0.7
+        K_d = 0.5
+        K_beta = 1
         rho_d_inf = 0.4 #Steady state error på distance
         rho_beta_inf = 15 #Steady state error på vinkel
 
@@ -69,8 +69,8 @@ class move_bot:
 
         #print("Xi_d:",xi_d)
         #print("Xi_beta:",xi_beta)
-        print("Rho n:",rho_d)
-        print("Rho m:",rho_beta)
+        print("Rho d:",rho_d)
+        print("Rho beta:",rho_beta)
         #print("Cm_under*rho_m",M_d_under*rho_d)
         #print("Cn_under*rho_n",M_beta_under*rho_beta)
 
@@ -302,3 +302,20 @@ if __name__ == '__main__':
     plt.show()
         
 
+
+    file_data = [time_list,
+                v_list, 
+                w_list,
+                d_lower_boundary_list,
+                d_upper_boundary_list,
+                error_d_list,
+                beta_lower_boundary_list,
+                beta_upper_boundary_list,
+                error_beta_list,
+                distance_list,
+                angle_list
+                ]
+    file = open('decent_k1_0.5_k2_1.csv','w+',newline='')
+    with file:
+        write = csv.writer(file)
+        write.writerows(file_data)

@@ -129,8 +129,8 @@ class move_bot:
             self.v = 0.3*self.temp_store_v[-1]+0.7*temp_v
             self.w = 0.3*self.temp_store_w[-1]+0.7*temp_w
             if len(self.temp_store_v) >= 2:
-                self.v = 0.1*self.temp_store_v[-2]+0.2*self.temp_store_v[-1]+0.7*temp_v
-                self.w = 0.1*self.temp_store_w[-2]+0.2*self.temp_store_w[-1]+0.7*temp_w
+                self.v = 1/3*self.temp_store_v[-2]+1/3*self.temp_store_v[-1]+1/3*temp_v
+                self.w = 1/3*self.temp_store_w[-2]+1/3*self.temp_store_w[-1]+1/3*temp_w
             if len(self.temp_store_v) >= 3:
                 del self.temp_store_v[0:-3]
         else:

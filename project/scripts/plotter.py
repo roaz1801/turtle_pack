@@ -174,7 +174,7 @@ if __name__ == '__main__':
     plt.legend()
     plt.show()
 
-
+"""
     file_data = [time_list[delay:],
                 leader_heading, 
                 follower_heading,
@@ -186,7 +186,7 @@ if __name__ == '__main__':
                 tb1_xlist,
                 tb1_ylist,
                 ]
-    file = open('vision_complete_position.csv','w+',newline='')
+    file = open('decentralized_pos_k1_0.5_k2_1.csv','w+',newline='')
     with file:
         write = csv.writer(file)
-        write.writerows(file_data)
+        write.writerows(file_data)"""

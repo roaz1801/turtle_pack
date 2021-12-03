@@ -213,8 +213,8 @@ class move_bot:
             self.v = 0.3*self.temp_store_v[-1]+0.7*temp_v
             self.w = 0.3*self.temp_store_w[-1]+0.7*temp_w
             if len(self.temp_store_v) >= 2:
-                self.v = 0.1*self.temp_store_v[-2]+0.2*self.temp_store_v[-1]+0.7*temp_v
-                self.w = 0.1*self.temp_store_w[-2]+0.2*self.temp_store_w[-1]+0.7*temp_w
+                self.v = 1/3*self.temp_store_v[-2]+1/3*self.temp_store_v[-1]+1/3*temp_v
+                self.w = 1/3*self.temp_store_w[-2]+1/3*self.temp_store_w[-1]+1/3*temp_w
             #Delete old entries of list to save space, they are not needed
             if len(self.temp_store_v) >= 3:
                 del self.temp_store_v[0:-3]
@@ -467,7 +467,7 @@ if __name__ == '__main__':
     axis[1].set_title("Angle between leader and follower")
     plt.show()
 
-
+"""
     file_data = [time_list,
                 v_list, 
                 w_list,
@@ -486,3 +486,4 @@ if __name__ == '__main__':
     with file:
         write = csv.writer(file)
         write.writerows(file_data)
+ """       
