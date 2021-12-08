@@ -38,8 +38,8 @@ class move_bot:
         #Placeholder values, disse må testes og justeres
         d_con = 2.8 #Lengde der kamera slutter å merke marker, må finne og justere denne.
         l = 0.1
-        K_d = 0.5
-        K_beta = 1
+        K_d = 0.3
+        K_beta = 0.7
         rho_d_inf = 0.4 #Steady state error på distance
         rho_beta_inf = 15 #Steady state error på vinkel
 
@@ -197,13 +197,6 @@ if __name__ == '__main__':
     axis[0, 1].set_ylabel("Velocity in m/s")
     axis[0, 1].set_title("Angular velocity")
    
-   
-    #axis[1, 0].plot(time_list,rho_d_list)
-    #axis[1, 0].set_title("Rho d")
-
-    #axis[1, 1].plot(time_list,rho_beta_list)
-    #axis[1, 1].set_title("Rho beta")
-
     axis[1, 0].plot(time_list,d_lower_boundary_list,label="Lower bound")
     axis[1, 0].plot(time_list,error_d_list,label="Error")
     axis[1, 0].plot(time_list,d_upper_boundary_list,label="Upper bound")
@@ -219,18 +212,6 @@ if __name__ == '__main__':
     axis[1, 1].set_ylabel("Error")
     axis[1, 1].set_title("Boundary")
     axis[1, 1].legend()
-
-    #axis[3, 0].plot(time_list,error_d_list)
-    #axis[3, 0].set_title("Error n")
-
-    #axis[3, 1].plot(time_list,error_beta_list)
-    #axis[3, 1].set_title("Error m")
-
-    #axis[4, 0].plot(time_list,epsilon_d_list)
-    #axis[4, 0].set_title("Epsilon n")
-
-    #axis[4, 1].plot(time_list,epsilon_beta_list)
-    #axis[4, 1].set_title("Epsilon m")
 
     axis[2, 0].plot(time_list,distance_list)
     axis[2, 0].set_xlabel("Time in seconds")
@@ -300,9 +281,8 @@ if __name__ == '__main__':
     figure.suptitle('Angle and distance between follower and leader', fontsize=16)
     
     plt.show()
-        
-
-
+  
+"""
     file_data = [time_list,
                 v_list, 
                 w_list,
@@ -315,7 +295,8 @@ if __name__ == '__main__':
                 distance_list,
                 angle_list
                 ]
-    file = open('decent_k1_0.5_k2_1.csv','w+',newline='')
+    file = open('.csv','w+',newline='')
     with file:
         write = csv.writer(file)
         write.writerows(file_data)
+ """

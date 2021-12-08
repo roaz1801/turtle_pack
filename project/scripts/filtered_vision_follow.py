@@ -53,7 +53,7 @@ class move_bot:
         rho_inf_m = 60
         rho_inf_n = 30
         k1 = 0.1
-        k2 = 0.8
+        k2 = 0.45
         l = 0.1
 
         #Center pixels, taken from camera calibration matrix K
@@ -159,6 +159,9 @@ class move_bot:
             temp_w = -k1*epsilon_m
             self.v = 0.3*self.temp_store_v[-1]+0.7*temp_v
             self.w = 0.3*self.temp_store_w[-1]+0.7*temp_w
+            #if len(self.temp_store_v) >= 2:
+             #   self.v = 0.1*self.temp_store_v[-2]+0.2*self.temp_store_v[-1]+0.7*temp_v
+              #  self.w = 0.1*self.temp_store_w[-2]+0.2*self.temp_store_w[-1]+0.7*temp_w
             if len(self.temp_store_v) >= 3:
                 del self.temp_store_v[0:-3]
         else: 

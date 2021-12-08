@@ -15,9 +15,8 @@ import csv
 """
 -----NODE DESCRIPTION-----
 plotter.py node stores the positions of the follower and leader, 
-and plots them 
+and plots them. Also writes data to files.
 """
-
 
 class data:
     def __init__(self):
@@ -118,13 +117,9 @@ if __name__ == '__main__':
             break
 
     if metode == 1:
-        delay = 135*5
+        delay = 640
 
         if len(tb0_heading_list) >= delay:
-            #print(time_list[delay:]) 
-            #print(tb0_heading_list[delay:])
-            #print(tb1_heading_list[:delay])
-            #print(len(tb0_xlist))
 
             leader_x = np.array(tb0_xlist[:-delay])
             follower_x = np.array(tb1_xlist[delay:])
@@ -143,9 +138,10 @@ if __name__ == '__main__':
                 leader_heading[i] = math.degrees(leader_heading[i])
                 follower_heading[i] = math.degrees(follower_heading[i])
                 heading_error[i] = math.degrees(heading_error[i])
-
             x_error = leader_x-follower_x
             y_error = leader_y-follower_y
+
+            rms = np.sqrt(1/2*(x_error**2+y_error**2))
 
             plt.title("Heading in angles")
             plt.plot(time_list[delay:],leader_heading,label="Leader heading")
@@ -156,14 +152,13 @@ if __name__ == '__main__':
             plt.legend()
             plt.show()
 
-            plt.title("Error in x and y position")
-            plt.plot(time_list[delay:],x_error,label="X-error")
-            plt.plot(time_list[delay:],y_error,label="Y-error")
+            plt.title("RMS of position error")
+            plt.plot(time_list[delay:],rms,label="RMS")
+            plt.xlabel("RMS")
+            plt.ylabel("Angle")
             plt.legend()
             plt.show()
 
-    #print(len(time_list))  
-    #print(len(tb0_heading_list))
     #Code for plotting
     plt.plot(tb0_xlist,tb0_ylist,label="Position of leader")
     plt.plot(tb1_xlist,tb1_ylist,label="Position of follower")
@@ -174,7 +169,7 @@ if __name__ == '__main__':
     plt.legend()
     plt.show()
 
-"""
+
     file_data = [time_list[delay:],
                 leader_heading, 
                 follower_heading,
@@ -186,7 +181,7 @@ if __name__ == '__main__':
                 tb1_xlist,
                 tb1_ylist,
                 ]
-    file = open('decentralized_pos_k1_0.5_k2_1.csv','w+',newline='')
+    file = open('.csv','w+',newline='')
     with file:
         write = csv.writer(file)
-        write.writerows(file_data)"""
+        write.writerows(file_data)

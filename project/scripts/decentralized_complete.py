@@ -6,6 +6,7 @@ import math
 import tf2_ros
 import numpy as np
 import matplotlib.pyplot as plt
+import csv
 
 class move_bot:
     def __init__(self):
@@ -52,8 +53,8 @@ class move_bot:
     def control(self,cam_dist,cam_beta,t):
         """Method where the velocity and angular velocity of the follower is
         calculated and then published to the wheels. """
-        d = 0.5*self.lidar_dist+0.5*cam_dist 
-        beta = 0.5*self.lidar_angle+0.5*cam_beta
+        d = 0.7*self.lidar_dist+0.3*cam_dist 
+        beta = 0.7*self.lidar_angle+0.3*cam_beta
 
         move = Twist()
         angle_of_view = 60 #Horizonal FoV of the Raspberry Pi
@@ -354,3 +355,21 @@ if __name__ == '__main__':
     figure.suptitle('Angle and distance between follower and leader', fontsize=16)
     
     plt.show()
+
+    file_data = [time_list,
+                v_list, 
+                w_list,
+                d_lower_boundary_list,
+                d_upper_boundary_list,
+                error_d_list,
+                beta_lower_boundary_list,
+                beta_upper_boundary_list,
+                error_beta_list,
+                distance_list,
+                angle_list
+                ]
+    file = open('.csv','w+',newline='')
+    with file:
+        write = csv.writer(file)
+        write.writerows(file_data)
+ 

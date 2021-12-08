@@ -25,15 +25,14 @@ if __name__ == '__main__':
     10:angle_list
     """
     
-    with open("decent_k1_0.3_k2_0.5.csv") as f:
+    with open("decentcomplete_weighttest_0.5_0.5.csv") as f:
         exp1 = list(csv.reader(f,delimiter=","))
 
-    with open("decent_k1_0.3_k2_0.7.csv") as f:
+    with open("decentcomplete_weighttest_0.3_0.7.csv") as f:
         exp2 = list(csv.reader(f,delimiter=","))
 
-    with open("decent_k1_0.5_k2_1.csv") as f:
+    with open("decentcomplete_weighttest_0.7_0.3.csv") as f:
         exp3 = list(csv.reader(f,delimiter=","))
-
 
     """
     For these, indices mean:
@@ -48,13 +47,13 @@ if __name__ == '__main__':
     8:tb1_xlist,
     9:tb1_ylist,
     """
-    with open("decentralized_pos_k1_0.3_k2_0.5.csv") as f:
+    with open("decentcomplete_pos_weighttest_0.5_0.5.csv") as f:
         exp1_pos = list(csv.reader(f,delimiter=","))
 
-    with open("decentralized_pos_k1_0.3_k2_0.7.csv") as f:
+    with open("decentcomplete_pos_weighttest_0.3_0.7.csv") as f:
         exp2_pos = list(csv.reader(f,delimiter=","))
 
-    with open("decentralized_pos_k1_0.5_k2_1.csv") as f:
+    with open("decentcomplete_pos_weighttest_0.7_0.3.csv") as f:
         exp3_pos = list(csv.reader(f,delimiter=","))
 
     for i in range(len(exp1)):

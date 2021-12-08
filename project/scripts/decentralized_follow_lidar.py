@@ -162,7 +162,7 @@ class move_bot:
 
 
 if __name__ == '__main__':
-    rospy.init_node("decentralized_lidar",disable_signals=True)
+    rospy.init_node("decentralized_follow",disable_signals=True)
     rate = rospy.Rate(135) #Loop rate 100Hz
     obj = move_bot()
 
