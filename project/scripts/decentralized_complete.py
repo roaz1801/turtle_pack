@@ -47,20 +47,14 @@ class move_bot:
         self.temp_store_v = []
         self.temp_store_w = []
 
-        self.normalized_v_error = []
-        self.normalized_w_error = []
-
     def control(self,cam_dist,cam_beta,t):
         """Method where the velocity and angular velocity of the follower is
         calculated and then published to the wheels. """
-        d = 0.7*self.lidar_dist+0.3*cam_dist 
-        beta = 0.7*self.lidar_angle+0.3*cam_beta
+        d = 0.5*self.lidar_dist+0.5*cam_dist 
+        beta = 0.5*self.lidar_angle+0.5*cam_beta
 
         move = Twist()
         angle_of_view = 60 #Horizonal FoV of the Raspberry Pi
-
-        #Wait for first message from callbacks. 
-        #rospy.wait_for_message("tb3_1/scan",LaserScan)
 
         #Boundary and tuning parameters
         d_con = 2.8 #Length where camera stops detecting marker
@@ -184,7 +178,7 @@ class move_bot:
         
 if __name__ == '__main__':
     rospy.init_node("decentralized_complete")
-    rate = rospy.Rate(135) #Loop rate 100Hz
+    rate = rospy.Rate(10) #Loop rate 100Hz
     obj = move_bot()
 
     #Initialize /tf transform listener
@@ -209,6 +203,9 @@ if __name__ == '__main__':
     v_list = []
     w_list = []
 
+    #Wait for first message from callbacks. 
+    rospy.wait_for_message("/tb3_1/scan",LaserScan)
+
 
     #Makes sure that timer starts correctly and avoids race conditions
     prevTime = 0
@@ -223,6 +220,10 @@ if __name__ == '__main__':
             continue
 
         try:
+
+            #Wait for first message from callbacks. 
+            #rospy.wait_for_message("/tb3_1/scan",LaserScan)
+
             currentTime = rospy.Time.now()
             delT = currentTime-prevTime
 
@@ -355,6 +356,7 @@ if __name__ == '__main__':
     figure.suptitle('Angle and distance between follower and leader', fontsize=16)
     
     plt.show()
+
 
     file_data = [time_list,
                 v_list, 

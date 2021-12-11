@@ -5,6 +5,7 @@ import math
 import tf2_ros
 import numpy as np
 import matplotlib.pyplot as plt
+import csv
 
 
 class move_bot:
@@ -38,8 +39,6 @@ class move_bot:
         self.v = 0
         self.w = 0
 
-        self.iter = 0
-
     def control(self,d,beta,t):
         move = Twist()
         angle_of_view = 60 #Horizonal FoV til raspberry pi cam 
@@ -68,29 +67,14 @@ class move_bot:
         error_d = d-d_desired 
         error_beta = beta
 
-        print("Error d",error_d)
-        print("Error beta:",error_beta)
-
         #Normalized error
         xi_d = error_d/rho_d
         xi_beta = error_beta/rho_beta
 
-        #print("Xi_d:",xi_d)
-        #print("Xi_beta:",xi_beta)
-        print("Rho n:",rho_d)
-        print("Rho m:",rho_beta)
-        #print("Cm_under*rho_m",M_d_under*rho_d)
-        #print("Cn_under*rho_n",M_beta_under*rho_beta)
-
         epsilon_d = np.log((1+xi_d/M_d_under)/(1-xi_d/M_d_over))
         epsilon_beta = np.log((1+xi_beta/M_beta_under)/(1-xi_beta/M_beta_over))
 
-        print("Epsilon_d:",epsilon_d)
-        print("Epsilon_beta:",epsilon_beta)
-
         r_beta = ((1/M_beta_under)+(1/M_beta_over))/(1+(xi_beta/M_beta_under)*(1-(xi_beta/M_beta_over)))
-
-
         
         self.store_rho_d = rho_d 
         self.store_rho_beta = rho_beta 
@@ -112,22 +96,18 @@ class move_bot:
         
 
         if self.temp_store_v:
-            #print("Not empty")
-            #print("v:",self.temp_store_v)
-            #print("w:",self.temp_store_w)
             temp_v = K_d*epsilon_d
             temp_w = K_beta*(1/rho_beta)*r_beta*epsilon_beta
             self.v = 0.3*self.temp_store_v[-1]+0.7*temp_v
             self.w = 0.3*self.temp_store_w[-1]+0.7*temp_w
-            #if len(self.temp_store_v) >= 2:
-             #   self.v = 0.1*self.temp_store_v[-2]+0.2*self.temp_store_v[-1]+0.7*temp_v
-              #  self.w = 0.1*self.temp_store_w[-2]+0.2*self.temp_store_w[-1]+0.7*temp_w
+            if len(self.temp_store_v) >= 2:
+                self.v = 1/3*self.temp_store_v[-2]+1/3*self.temp_store_v[-1]+1/3*temp_v
+                self.w = 1/3*self.temp_store_w[-2]+1/3*self.temp_store_w[-1]+1/3*temp_w
             if len(self.temp_store_v) >= 3:
                 del self.temp_store_v[0:-3]
         else:
             self.v = K_d*epsilon_d
             self.w = K_beta*(1/rho_beta)*r_beta*epsilon_beta
-        print("-------------")
 
         self.store_v = self.v 
         self.store_w = self.w
@@ -140,11 +120,10 @@ class move_bot:
 
         
         self.pub.publish(move)
-        #self.iter += 1
 
 if __name__ == '__main__':
     rospy.init_node("decentralized_filter",disable_signals=True)
-    rate = rospy.Rate(135) #Loop rate 100Hz
+    rate = rospy.Rate(10) #Loop rate 100Hz
     obj = move_bot()
 
     tfBuffer = tf2_ros.Buffer()
@@ -190,7 +169,6 @@ if __name__ == '__main__':
             rads = np.arctan(-trans.transform.translation.y/-trans.transform.translation.x)
             angle = math.degrees(rads)
 
-            print("Distance:",distance)
             #Sender distans, angles og tid til kontroll
             obj.control(distance,angle,delT.to_sec())
 
@@ -226,14 +204,7 @@ if __name__ == '__main__':
     axis[0, 1].set_xlabel("Time in seconds")
     axis[0, 1].set_ylabel("Velocity in m/s")
     axis[0, 1].set_title("Angular velocity")
-   
-   
-    #axis[1, 0].plot(time_list,rho_d_list)
-    #axis[1, 0].set_title("Rho d")
-
-    #axis[1, 1].plot(time_list,rho_beta_list)
-    #axis[1, 1].set_title("Rho beta")
-
+ 
     axis[1, 0].plot(time_list,d_lower_boundary_list,label="Lower bound")
     axis[1, 0].plot(time_list,error_d_list,label="Error")
     axis[1, 0].plot(time_list,d_upper_boundary_list,label="Upper bound")
@@ -249,18 +220,6 @@ if __name__ == '__main__':
     axis[1, 1].set_ylabel("Error")
     axis[1, 1].set_title("Boundary")
     axis[1, 1].legend()
-
-    #axis[3, 0].plot(time_list,error_d_list)
-    #axis[3, 0].set_title("Error n")
-
-    #axis[3, 1].plot(time_list,error_beta_list)
-    #axis[3, 1].set_title("Error m")
-
-    #axis[4, 0].plot(time_list,epsilon_d_list)
-    #axis[4, 0].set_title("Epsilon n")
-
-    #axis[4, 1].plot(time_list,epsilon_beta_list)
-    #axis[4, 1].set_title("Epsilon m")
 
     axis[2, 0].plot(time_list,distance_list)
     axis[2, 0].set_xlabel("Time in seconds")
@@ -331,4 +290,21 @@ if __name__ == '__main__':
     
     plt.show()
         
-
+  """    
+    file_data = [time_list,
+                v_list, 
+                w_list,
+                d_lower_boundary_list,
+                d_upper_boundary_list,
+                error_d_list,
+                beta_lower_boundary_list,
+                beta_upper_boundary_list,
+                error_beta_list,
+                distance_list,
+                angle_list
+                ]
+    file = open('.csv','w+',newline='')
+    with file:
+        write = csv.writer(file)
+        write.writerows(file_data)
+"""

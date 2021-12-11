@@ -1,0 +1,18 @@
+digraph G {
+"base_footprint" -> "base_link"[label=" Broadcaster: /tb3_0/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"odom" -> "base_footprint"[label=" Broadcaster: /gazebo\nAverage rate: 57.994\nBuffer length: 4.966\nMost recent transform: 4467.599\nOldest transform: 4462.633\n"];
+"base_link" -> "camera_link"[label=" Broadcaster: /tb3_0/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"camera_link" -> "camera_rgb_frame"[label=" Broadcaster: /tb3_0/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"camera_rgb_frame" -> "camera_rgb_optical_frame"[label=" Broadcaster: /tb3_0/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"base_link" -> "caster_back_left_link"[label=" Broadcaster: /tb3_0/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"base_link" -> "caster_back_right_link"[label=" Broadcaster: /tb3_0/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"base_link" -> "imu_link"[label=" Broadcaster: /tb3_0/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"base_link" -> "base_scan"[label=" Broadcaster: /tb3_0/robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"camera_rgb_optical_frame" -> "fiducial_0"[label=" Broadcaster: /aruco_detect\nAverage rate: 28.56\nBuffer length: 4.972\nMost recent transform: 4467.589\nOldest transform: 4462.617\n"];
+"base_link" -> "wheel_left_link"[label=" Broadcaster: /tb3_1/robot_state_publisher\nAverage rate: 32.226\nBuffer length: 4.965\nMost recent transform: 4467.599\nOldest transform: 4462.634\n"];
+"base_link" -> "wheel_right_link"[label=" Broadcaster: /tb3_1/robot_state_publisher\nAverage rate: 32.226\nBuffer length: 4.965\nMost recent transform: 4467.599\nOldest transform: 4462.634\n"];
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 4467.606"[ shape=plaintext ] ;
+}->"odom";
+}

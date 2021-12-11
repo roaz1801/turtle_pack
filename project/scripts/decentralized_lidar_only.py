@@ -6,6 +6,7 @@ import math
 import tf2_ros
 import numpy as np
 import matplotlib.pyplot as plt
+import csv
 
 class move_bot:
     def __init__(self):
@@ -52,8 +53,6 @@ class move_bot:
         move = Twist()
         angle_of_view = 60 #Horizonal FoV of the Raspberry Pi
 
-        #Wait for first message from callbacks. 
-        rospy.wait_for_message("tb3_1/scan",LaserScan)
 
         #Boundary and tuning parameters
         d_con = 2.8 #Length where camera stops detecting marker
@@ -63,9 +62,6 @@ class move_bot:
         rho_d_inf = 0.4 #Steady state error on distance
         rho_beta_inf = 15 #Steady state error on angle
 
-
-        print(d)
-        print(beta)
 
         d_desired = 0.75
         d_col = 0.2*d_desired
@@ -89,9 +85,6 @@ class move_bot:
     
         epsilon_d = np.log((1+xi_d/M_d_under)/(1-xi_d/M_d_over))
         epsilon_beta = np.log((1+xi_beta/M_beta_under)/(1-xi_beta/M_beta_over))
-        #self.store_epsilon = epsilon_d
-        #print("Epsilon_d:",epsilon_d)
-        #print("Epsilon_beta:",epsilon_beta)
 
         r_beta = ((1/M_beta_under)+(1/M_beta_over))/(1+(xi_beta/M_beta_under)*(1-(xi_beta/M_beta_over)))
 
@@ -160,7 +153,7 @@ class move_bot:
         
 if __name__ == '__main__':
     rospy.init_node("decentralized_lidar",disable_signals=True)
-    rate = rospy.Rate(135) #Loop rate 100Hz
+    rate = rospy.Rate(10) #Loop rate 100Hz
     obj = move_bot()
 
     #Initialize /tf transform listener
@@ -170,12 +163,12 @@ if __name__ == '__main__':
 
     #Lists for plotting
     time_list = []
-    epsilon_d_list = []
-    epsilon_beta_list = []
+    #epsilon_d_list = []
+    #epsilon_beta_list = []
     error_d_list = []
     error_beta_list = []
-    rho_d_list = []
-    rho_beta_list = []
+    #rho_d_list = []
+    #rho_beta_list = []
     d_lower_boundary_list = []
     d_upper_boundary_list = []
     beta_lower_boundary_list = []
@@ -185,6 +178,8 @@ if __name__ == '__main__':
     v_list = []
     w_list = []
 
+    #Wait for first message from callbacks. 
+    rospy.wait_for_message("/tb3_1/scan",LaserScan)
 
     #Makes sure that timer starts correctly and avoids race conditions
     prevTime = 0
@@ -199,6 +194,7 @@ if __name__ == '__main__':
             continue
 
         try:
+
             currentTime = rospy.Time.now()
             delT = currentTime-prevTime
 
@@ -210,15 +206,14 @@ if __name__ == '__main__':
             #print("Distance:",distance)
             obj.control(distance,angle,delT.to_sec())
 
-
             #Append data to list for plotting
             time_list.append(delT.to_sec())
-            epsilon_d_list.append(obj.store_epsilon_d)
-            epsilon_beta_list.append(obj.store_epsilon_beta)
+            #epsilon_d_list.append(obj.store_epsilon_d)
+            #epsilon_beta_list.append(obj.store_epsilon_beta)
             error_d_list.append(obj.store_error_d)
             error_beta_list.append(obj.store_error_beta)
-            rho_d_list.append(obj.store_rho_d)
-            rho_beta_list.append(obj.store_rho_beta)
+            #rho_d_list.append(obj.store_rho_d)
+            #rho_beta_list.append(obj.store_rho_beta)
             d_lower_boundary_list.append(obj.store_lowerboundary_d)
             d_upper_boundary_list.append(obj.store_upperboundary_d)
             beta_lower_boundary_list.append(obj.store_lowerboundary_beta)
@@ -332,3 +327,21 @@ if __name__ == '__main__':
     
     plt.show()
         
+"""
+    file_data = [time_list,
+                v_list, 
+                w_list,
+                d_lower_boundary_list,
+                d_upper_boundary_list,
+                error_d_list,
+                beta_lower_boundary_list,
+                beta_upper_boundary_list,
+                error_beta_list,
+                distance_list,
+                angle_list
+                ]
+    file = open('.csv','w+',newline='')
+    with file:
+        write = csv.writer(file)
+        write.writerows(file_data)
+"""

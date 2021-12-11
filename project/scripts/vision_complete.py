@@ -70,9 +70,6 @@ class move_bot:
            calculated and then published to the wheels. """
         move = Twist()
 
-        #Wait for first message from callbacks. 
-        rospy.wait_for_message("tb3_1/scan",LaserScan)
-        rospy.wait_for_message("/fiducial_vertices",FiducialArray)
         
         #Boundary and tuning parameters
         rho_inf_m = 60
@@ -280,7 +277,7 @@ class move_bot:
 
 if __name__ == '__main__':
     rospy.init_node("vision_complete")
-    rate = rospy.Rate(135) #Loop rate 
+    rate = rospy.Rate(10) #Loop rate 
     obj = move_bot()
 
     #Initialize /tf transform listener
@@ -306,6 +303,10 @@ if __name__ == '__main__':
     m_list = []
     n_list = []
 
+    #Wait for first message from callbacks. 
+    rospy.wait_for_message("tb3_1/scan",LaserScan)
+    rospy.wait_for_message("/fiducial_vertices",FiducialArray)
+
     #Makes sure that timer starts correctly and avoids race conditions
     prevTime = 0
     while not prevTime:
@@ -321,6 +322,7 @@ if __name__ == '__main__':
             continue
 
         try:
+
             currentTime = rospy.Time.now()
 
             delT = currentTime-prevTime

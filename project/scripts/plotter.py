@@ -53,7 +53,7 @@ class data:
 
 if __name__ == '__main__':
     rospy.init_node("position_plotter",disable_signals=True)
-    rate = rospy.Rate(135) #Loop rate
+    rate = rospy.Rate(10) #Loop rate
 
     obj = data()
 
@@ -117,7 +117,7 @@ if __name__ == '__main__':
             break
 
     if metode == 1:
-        delay = 640
+        delay = 47
 
         if len(tb0_heading_list) >= delay:
 
@@ -169,7 +169,7 @@ if __name__ == '__main__':
     plt.legend()
     plt.show()
 
-
+"""
     file_data = [time_list[delay:],
                 leader_heading, 
                 follower_heading,
@@ -185,3 +185,4 @@ if __name__ == '__main__':
     with file:
         write = csv.writer(file)
         write.writerows(file_data)
+"""

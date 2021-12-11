@@ -75,7 +75,7 @@ class move_bot:
 
 if __name__ == '__main__':
     rospy.init_node("simple_follow")
-    rate = rospy.Rate(135)
+    rate = rospy.Rate(10)
     obj = move_bot()
 
     #4 methods, 1 is driving in circle, 2 is driving in figure 8, 3 is line with constant speed

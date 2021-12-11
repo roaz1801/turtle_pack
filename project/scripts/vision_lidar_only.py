@@ -236,7 +236,7 @@ class move_bot:
 
 if __name__ == '__main__':
     rospy.init_node("vision_lidar")
-    rate = rospy.Rate(135) #Loop rate 
+    rate = rospy.Rate(10) #Loop rate 
     obj = move_bot()
 
     #Initialize /tf transform listener

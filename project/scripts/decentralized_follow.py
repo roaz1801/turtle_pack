@@ -60,25 +60,12 @@ class move_bot:
         error_d = d-d_desired 
         error_beta = beta
 
-        print("Error d",error_d)
-        print("Error beta:",error_beta)
-
         #Normalized error
         xi_d = error_d/rho_d
         xi_beta = error_beta/rho_beta
 
-        #print("Xi_d:",xi_d)
-        #print("Xi_beta:",xi_beta)
-        print("Rho d:",rho_d)
-        print("Rho beta:",rho_beta)
-        #print("Cm_under*rho_m",M_d_under*rho_d)
-        #print("Cn_under*rho_n",M_beta_under*rho_beta)
-
         epsilon_d = np.log((1+xi_d/M_d_under)/(1-xi_d/M_d_over))
         epsilon_beta = np.log((1+xi_beta/M_beta_under)/(1-xi_beta/M_beta_over))
-
-        print("Epsilon_d:",epsilon_d)
-        print("Epsilon_beta:",epsilon_beta)
 
         r_beta = ((1/M_beta_under)+(1/M_beta_over))/(1+(xi_beta/M_beta_under)*(1-(xi_beta/M_beta_over)))
 
@@ -106,7 +93,6 @@ class move_bot:
         self.store_v = v 
         self.store_w = w
 
-        print("-------------")
         move.linear.x = v
         move.angular.z = w
 
@@ -114,7 +100,7 @@ class move_bot:
 
 if __name__ == '__main__':
     rospy.init_node("decentralized_follow",disable_signals=True)
-    rate = rospy.Rate(135) #Loop rate 100Hz
+    rate = rospy.Rate(10) #Loop rate 100Hz
     obj = move_bot()
 
     tfBuffer = tf2_ros.Buffer()
@@ -160,7 +146,6 @@ if __name__ == '__main__':
             rads = np.arctan(-trans.transform.translation.y/-trans.transform.translation.x)
             angle = math.degrees(rads)
 
-            print("Distance:",distance)
             #Sender distans, angles og tid til kontroll
             obj.control(distance,angle,delT.to_sec())
 
@@ -295,7 +280,7 @@ if __name__ == '__main__':
                 distance_list,
                 angle_list
                 ]
-    file = open('.csv','w+',newline='')
+    file = open('csv','w+',newline='')
     with file:
         write = csv.writer(file)
         write.writerows(file_data)

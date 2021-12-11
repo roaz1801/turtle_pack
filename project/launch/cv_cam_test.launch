@@ -1,0 +1,30 @@
+<launch>
+  <arg name="mapping_mode" default="false"/>
+  <arg name="fiducial_len" default="0.15"/>
+
+  <!-- camera -->
+  <node pkg = "cv_camera" type="cv_camera_node" name="cv_camera" output="screen">
+   <param name="image_width" value="640"/>
+   <param name="image_heigth" value="480"/>
+   </node>
+
+  <!-- Fiducial detection -->
+  <include file="$(find aruco_detect)/launch/aruco_detect.launch">
+    <arg name="camera" value="/cv_camera"/>
+    <arg name="image" value="image_raw"/>
+    <arg name="transport" value="compressed"/>
+    <arg name="dictionary" value="0"/>
+
+    <!-- fiducial_len -->
+    <arg name="fiducial_len" value="$(arg fiducial_len)" />
+  </include>
+  
+    <!-- Fiducial slam -->
+  <include file="$(find fiducial_slam)/launch/fiducial_slam.launch">
+    <arg name="map_frame" value="map"/>
+    <arg name="odom_frame" value="odom"/>
+    <arg name="base_frame" value="base_footprint"/>
+    <arg name="future_date_transforms" value="0.5"/>
+  </include>
+
+  </launch>

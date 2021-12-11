@@ -197,7 +197,7 @@ class move_bot:
 
 if __name__ == '__main__':
     rospy.init_node("vision_filter",disable_signals=True)
-    rate = rospy.Rate(135) #Loop rate 100Hz
+    rate = rospy.Rate(10) #Loop rate 100Hz
     obj = move_bot()
 
     tfBuffer = tf2_ros.Buffer()

@@ -57,14 +57,11 @@ class move_bot:
         m = self.marker_center[0]
         n = self.marker_center[1]
 
-
-        print("M:",m)
-        print("N:",n)
         #Boundary and tuning parameters
         rho_inf_m = 60
         rho_inf_n = 30
-        k1 = 0.05
-        k2 = 1.2
+        k1 = 0.1
+        k2 = 0.45
         l = 0.1
 
         #Center pixels, taken from camera calibration matrix K
@@ -170,7 +167,7 @@ class move_bot:
 
 if __name__ == '__main__':
     rospy.init_node("vision_follow",disable_signals=True)
-    rate = rospy.Rate(135) #Loop rate 
+    rate = rospy.Rate(10) #Loop rate 
     obj = move_bot()
 
     #Initialize /tf transform listener

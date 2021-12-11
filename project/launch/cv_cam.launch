@@ -4,10 +4,7 @@
    <param name="image_heigth" value="480"/>
    </node>
   
-  <node pkg="tf" type="static_transform_publisher" name="camera_frames_pub" args="0.05 0.0 0.1 0 0 0 /base_link /camera 35"/>
-
-
-    <!-- Start marker detector-->
+    <!-- Start marker detector -->
  <node name="aruco_detect" pkg="aruco_detect" type="aruco_detect">
     <param name="image_transport" value="compressed" />
     <param name="publish_images" value="true" />
@@ -19,5 +16,5 @@
     <remap from="/camera/compressed" to="/cv_camera/image_raw/compressed"/>
     <remap from="/camera_info" to="/cv_camera/camera_info"/>
   </node> 
- 
+
 </launch>
