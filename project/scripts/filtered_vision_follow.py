@@ -6,6 +6,7 @@ import math
 import tf2_ros
 import numpy as np
 import matplotlib.pyplot as plt
+import csv
 
 
 class move_bot:
@@ -52,7 +53,7 @@ class move_bot:
         print("N:",n)
         rho_inf_m = 60
         rho_inf_n = 30
-        k1 = 0.1
+        k1 = 0.07
         k2 = 0.45
         l = 0.1
 
@@ -159,9 +160,9 @@ class move_bot:
             temp_w = -k1*epsilon_m
             self.v = 0.3*self.temp_store_v[-1]+0.7*temp_v
             self.w = 0.3*self.temp_store_w[-1]+0.7*temp_w
-            #if len(self.temp_store_v) >= 2:
-             #   self.v = 0.1*self.temp_store_v[-2]+0.2*self.temp_store_v[-1]+0.7*temp_v
-              #  self.w = 0.1*self.temp_store_w[-2]+0.2*self.temp_store_w[-1]+0.7*temp_w
+            if len(self.temp_store_v) >= 2:
+                self.v = 1/3*self.temp_store_v[-2]+1/3*self.temp_store_v[-1]+1/3*temp_v
+                self.w = 1/3*self.temp_store_w[-2]+1/3*self.temp_store_w[-1]+1/3*temp_w
             if len(self.temp_store_v) >= 3:
                 del self.temp_store_v[0:-3]
         else: 
@@ -214,10 +215,15 @@ if __name__ == '__main__':
     m_upper_boundary_list = []
     n_lower_boundary_list = []
     n_upper_boundary_list = []
+    distance_list = []
+    angle_list = []
     v_list = []
     w_list = []
     m_list = []
     n_list = []
+
+    #Wait for first message from callbacks. 
+    rospy.wait_for_message("/fiducial_vertices",FiducialArray)
 
     #Passer på at tid starter korrekt/tar hånd om race condition
     prevTime = 0
@@ -267,10 +273,11 @@ if __name__ == '__main__':
             n_upper_boundary_list.append(obj.store_upperboundary_n)
             m_list.append(obj.store_m)
             n_list.append(obj.store_n)
-
             v_list.append(obj.store_v)
             w_list.append(obj.store_w)
 
+            distance_list.append(distance) 
+            angle_list.append(angle)
 
             rate.sleep()
 
@@ -387,3 +394,24 @@ if __name__ == '__main__':
     axis[1].set_ylabel("Pixel coordinate")
     figure.suptitle('Pixel coordinates of the marker in followers camera', fontsize=16)
     plt.show()
+
+"""
+    file_data = [time_list,
+                v_list, 
+                w_list,
+                n_lower_boundary_list,
+                n_upper_boundary_list,
+                error_n_list,
+                m_lower_boundary_list,
+                m_upper_boundary_list,
+                error_m_list,
+                n_list,
+                m_list,
+                distance_list,
+                angle_list
+                ]
+    file = open('.csv','w+',newline='')
+    with file:
+        write = csv.writer(file)
+        write.writerows(file_data)
+"""

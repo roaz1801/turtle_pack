@@ -117,7 +117,7 @@ if __name__ == '__main__':
             break
 
     if metode == 1:
-        delay = 47
+        delay = 47  #47 for decentralized, 62 for vision
 
         if len(tb0_heading_list) >= delay:
 
@@ -142,6 +142,13 @@ if __name__ == '__main__':
             y_error = leader_y-follower_y
 
             rms = np.sqrt(1/2*(x_error**2+y_error**2))
+
+
+            plt.title("Heading in angles")
+            plt.plot(leader_x,leader_y,label="Leader heading")
+            plt.plot(follower_x,follower_y,label="Follower heading")
+            plt.legend()
+            plt.show()
 
             plt.title("Heading in angles")
             plt.plot(time_list[delay:],leader_heading,label="Leader heading")

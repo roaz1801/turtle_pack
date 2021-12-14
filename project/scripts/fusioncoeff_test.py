@@ -11,6 +11,20 @@ Må legges inn etter at data har blitt skaffet.
 
 if __name__ == '__main__':
     """
+    For this, the indices mean:
+    0:time_list,
+    1:v_list
+    2:w_list
+    """
+    with open("csv_files/leader_circle.csv") as f:
+        leader = list(csv.reader(f,delimiter=","))
+
+    for i in range(len(leader[1])):
+        leader[0][i] = np.float(leader[0][i])
+        leader[1][i] = np.float(leader[1][i])
+        leader[2][i] = np.float(leader[2][i])
+
+    """
     For these, the indices mean:
     0:time_list,
     1:v_list, 
@@ -66,10 +80,22 @@ if __name__ == '__main__':
        exp2_pos[i] = np.float_(exp2_pos[i])
        exp3_pos[i] = np.float_(exp3_pos[i])
 
+
+    vel_error1 = np.zeros(3000)
+    vel_error2 = np.zeros(3000)
+    vel_error3 = np.zeros(3000)
+
+    ang_vel_error1 = np.zeros(3000)
+    ang_vel_error2 = np.zeros(3000)
+    ang_vel_error3 = np.zeros(3000)
     for i in range(len(exp1_pos[3][:3000])):
-        exp1_pos[3][i] = math.degrees(math.atan2(np.sin(exp1_pos[1][i]-exp1_pos[2][i]),np.cos(exp1_pos[1][i]-exp1_pos[2][i])))
-        exp2_pos[3][i] = math.degrees(math.atan2(np.sin(exp2_pos[1][i]-exp2_pos[2][i]),np.cos(exp2_pos[1][i]-exp2_pos[2][i])))
-        exp3_pos[3][i] = math.degrees(math.atan2(np.sin(exp3_pos[1][i]-exp3_pos[2][i]),np.cos(exp3_pos[1][i]-exp3_pos[2][i])))
+        vel_error1[i] = exp1[1][i]-leader[1][i]
+        vel_error2[i] = exp2[1][i]-leader[1][i]
+        vel_error3[i] = exp3[1][i]-leader[1][i]
+
+        ang_vel_error1[i] = exp1[2][i]-leader[2][i]
+        ang_vel_error2[i] = exp2[2][i]-leader[2][i]
+        ang_vel_error3[i] = exp3[2][i]-leader[2][i]
 
     pos_error_rms1 = np.sqrt(1/2*(exp1_pos[4]**2+exp1_pos[5]**2))
     pos_error_rms2 = np.sqrt(1/2*(exp2_pos[4]**2+exp2_pos[5]**2))
@@ -98,7 +124,27 @@ if __name__ == '__main__':
     print("Angular Velocity mean 3:",np.mean(exp3[2][200:3000]))
     print("Angular Velocity std.dev 3:",np.std(exp3[2][200:3000]))
 
-    #velocity error mean and std dev
+      #velocity error mean and stdev
+    print("Velocity error mean 1:",np.mean(vel_error1[200:3000]))
+    print("Velocity error std.dev 1:",np.std(vel_error1[200:3000]))
+
+    print("Velocity error mean 2:",np.mean(vel_error2[200:3000]))
+    print("Velocity error std.dev 2:",np.std(vel_error2[200:3000]))
+
+    print("Velocity error mean 3:",np.mean(vel_error3[200:3000]))
+    print("Velocity error std.dev 3:",np.std(vel_error3[200:3000]))
+
+    #Angular velocity error mean and stdev
+    print("Angular velocity error mean 1:",np.mean(ang_vel_error1[200:3000]))
+    print("Angular velocity error std.dev 1:",np.std(ang_vel_error1[200:3000]))
+
+    print("Angular Velocity error mean 2:",np.mean(ang_vel_error2[200:3000]))
+    print("Angular Velocity error std.dev 2:",np.std(ang_vel_error2[200:3000]))
+
+    print("Angular Velocity error mean 3:",np.mean(ang_vel_error3[200:3000]))
+    print("Angular velocity error std.dev 3:",np.std(ang_vel_error3[200:3000]))
+
+    #Distance error mean and std dev
     print("Distance error mean 1:",np.mean(exp1[5][200:3000]))
     print("Distance error std.dev 1:",np.std(exp1[5][200:3000]))
 
@@ -109,7 +155,7 @@ if __name__ == '__main__':
     print("Distance error std.dev 3:",np.std(exp3[5][200:3000]))
 
 
-    #Angular velocity error mean and std dev
+    #Angular error mean and std dev
     print("Angular error mean 1:",np.mean(exp1[8][200:3000]))
     print("Angular error 1 std.dev:",np.std(exp1[8][200:3000]))
 
@@ -149,15 +195,24 @@ if __name__ == '__main__':
     print("Pos_error RMS mean 3:",np.mean(pos_error_rms3[200:3000]))
     print("Pos_error RMS std.dev 3:",np.std(pos_error_rms3[200:3000]))
 
-    #Heading error mean and std. dev
-    print("Heading error mean 1:",np.mean(exp1_pos[3][200:3000]))
-    print("Heading error std.dev 1:",np.std(exp1_pos[3][200:3000]))
-
-    print("Heading error mean 2:",np.mean(exp2_pos[3][200:3000]))
-    print("Heading error std.dev 2:",np.std(exp2_pos[3][200:3000]))
-
-    print("Heading error mean 3:",np.mean(exp3_pos[3][200:3000]))
-    print("Heading error std.dev 3:",np.std(exp3_pos[3][200:3000]))
+    #Plotting velocity and angular velocity error
+    figure, axis = plt.subplots(1, 2)
+    axis[0].plot(exp1[0][:3000],vel_error1[:3000],label="Camera-only",color = "blue")
+    axis[0].plot(exp2[0][:3000],vel_error2[:3000],label="Lidar-only",color = "red")
+    axis[0].plot(exp3[0][:3000],vel_error3[:3000],label="Filtered",color = "green")
+    axis[0].set_xlabel("Time in seconds")
+    axis[0].set_ylabel("Velocity error in m/s")
+    axis[0].set_title("Velocity error")
+    axis[0].legend()
+    
+    axis[1].plot(exp1[0][:3000],ang_vel_error1[:3000],label="Camera-only",color = "blue")
+    axis[1].plot(exp2[0][:3000],ang_vel_error2[:3000],label="Lidar only",color = "red")
+    axis[1].plot(exp3[0][:3000],ang_vel_error3[:3000],label="Filtered",color = "green")
+    axis[1].set_xlabel("Time in seconds")
+    axis[1].set_ylabel("Angular velocity error in m/s")
+    axis[1].set_title("Angular velocity error")
+    axis[1].legend()
+    plt.show()
 
     #Stopping index at 3000 because that is 300 seconds
     #Plotting velocity and angular velocity
@@ -243,12 +298,3 @@ if __name__ == '__main__':
     plt.legend()
     plt.show()
 
-    #Plotting position heading error
-    plt.plot(exp1_pos[0][:3000],exp1_pos[3][:3000],label="(k1,k2)=(0.3,0.5)",color = "blue")
-    plt.plot(exp2_pos[0][:3000],exp2_pos[3][:3000],label="(k1,k2)=(0.3,0.7)",color = "green")
-    plt.plot(exp3_pos[0][:3000],exp3_pos[3][:3000],label="(k1,k2)=(0.5,0.7)",color = "red")
-    plt.title("Error in heading")
-    plt.xlabel("Time")
-    plt.ylabel("Heading angle")
-    plt.legend()
-    plt.show()

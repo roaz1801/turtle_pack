@@ -4,6 +4,7 @@ from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
 import numpy as np
 import matplotlib.pyplot as plt
+import csv
 
 """
 -----NODE DESCRIPTION-----
@@ -50,21 +51,21 @@ class move_bot:
 
         if method == 4:
         #Method 4, drive in a line, accelerates up to 0.4 and then down to 0
-            if time >= 0 and time <= 20:
+            if time >= 0 and time <= 40:
                 move.linear.x = 0.1
-            if time > 20 and time <= 40:
-                move.linear.x = 0.2
             if time > 40 and time <= 60:
-                move.linear.x = 0.3
-            if time > 60 and time <= 80:
-                move.linear.x = 0.4
-            if time > 80 and time <= 100:
-                move.linear.x = 0.3
-            if time > 100 and time <= 120:
                 move.linear.x = 0.2
+            if time > 60 and time <= 80:
+                move.linear.x = 0.3
+            if time > 80 and time <= 100:
+                move.linear.x = 0.4
+            if time > 100 and time <= 120:
+                move.linear.x = 0.3
             if time > 120 and time <= 140:
+                move.linear.x = 0.2
+            if time > 140 and time <= 160:
                 move.linear.x = 0.1
-            if time > 140:
+            if time > 160:
                 move.linear.x = 0
 
         #Apply velocities
@@ -80,7 +81,7 @@ if __name__ == '__main__':
 
     #4 methods, 1 is driving in circle, 2 is driving in figure 8, 3 is line with constant speed
     #4 is line with changing speeds.
-    method = 1
+    method = 2
     
     prevTime = 0
 
@@ -123,3 +124,14 @@ if __name__ == '__main__':
     axis[1].set_title("Angular velocity of Leader")
 
     plt.show()
+
+"""
+    file_data = [time_list,
+                v_list, 
+                w_list
+                ]
+    file = open('csv_files/leader_figure8.csv','w+',newline='')
+    with file:
+        write = csv.writer(file)
+        write.writerows(file_data)
+"""

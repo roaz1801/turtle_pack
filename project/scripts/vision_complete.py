@@ -61,10 +61,6 @@ class move_bot:
         self.v = 0
         self.w = 0
 
-        #Variable to check if marker has been detected or not
-        self.detected = 0
-
-
     def control(self,h,t):
         """Method where the velocity and angular velocity of the follower is
            calculated and then published to the wheels. """
@@ -74,7 +70,7 @@ class move_bot:
         #Boundary and tuning parameters
         rho_inf_m = 60
         rho_inf_n = 30
-        k1 = 0.1
+        k1 = 0.07
         k2 = 0.45
         l = 0.1
 
@@ -484,8 +480,8 @@ if __name__ == '__main__':
                 distance_list,
                 angle_list
                 ]
-    file = open('vision_complete.csv','w+',newline='')
+    file = open('.csv','w+',newline='')
     with file:
         write = csv.writer(file)
         write.writerows(file_data)
- """       
+"""

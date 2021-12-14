@@ -60,7 +60,7 @@ class move_bot:
         d_con = 2.8 #Length where camera stops detecting marker
         l = 0.1
         K_d = 0.3
-        K_beta = 0.7
+        K_beta = 1
         rho_d_inf = 0.4 #Steady state error on distance
         rho_beta_inf = 15 #Steady state error on angle
 
@@ -357,7 +357,7 @@ if __name__ == '__main__':
     
     plt.show()
 
-
+"""
     file_data = [time_list,
                 v_list, 
                 w_list,
@@ -374,4 +374,4 @@ if __name__ == '__main__':
     with file:
         write = csv.writer(file)
         write.writerows(file_data)
- 
+ """

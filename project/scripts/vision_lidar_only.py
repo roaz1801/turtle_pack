@@ -7,7 +7,7 @@ import math
 import tf2_ros
 import numpy as np
 import matplotlib.pyplot as plt
-
+import csv
 
 """
 -----NODE DESCRIPTION-----
@@ -59,15 +59,11 @@ class move_bot:
         """Method where the velocity and angular velocity of the follower is
            calculated and then published to the wheels. """
         move = Twist()
-
-        #Wait for first message from callbacks. 
-        rospy.wait_for_message("tb3_1/scan",LaserScan)
-        #rospy.wait_for_message("/fiducial_vertices",FiducialArray)
         
         #Boundary and tuning parameters
         rho_inf_m = 60
         rho_inf_n = 30
-        k1 = 0.1
+        k1 = 0.07
         k2 = 0.45
         l = 0.1
 
@@ -259,6 +255,11 @@ if __name__ == '__main__':
     w_list = []
     m_list = []
     n_list = []
+    distance_list = []
+    angle_list = []
+
+    #Wait for first message from callbacks. 
+    rospy.wait_for_message("tb3_1/scan",LaserScan)
 
     #Makes sure that timer starts correctly and avoids race conditions
     prevTime = 0
@@ -282,6 +283,12 @@ if __name__ == '__main__':
             #Get information about the position of marker in relation to the camera
             h = -0.06#trans_camera_frame.transform.translation.y 
  
+
+            #Get information about distance and angle 
+            distance = np.sqrt((0-trans.transform.translation.x)**2+(0-trans.transform.translation.y)**2)
+            rads = np.arctan(-trans.transform.translation.y/-trans.transform.translation.x)
+            angle = math.degrees(rads)
+
             obj.control(h,delT.to_sec())
 
             #Append data to list for plotting
@@ -300,6 +307,9 @@ if __name__ == '__main__':
             n_list.append(obj.store_n)
             v_list.append(obj.store_v)
             w_list.append(obj.store_w)
+
+            distance_list.append(distance) 
+            angle_list.append(angle)
 
             rate.sleep()
 
@@ -399,3 +409,24 @@ if __name__ == '__main__':
     axis[1].set_ylabel("Pixel coordinate")
     figure.suptitle('Pixel coordinates of the marker in followers camera', fontsize=16)
     plt.show()
+
+"""
+    file_data = [time_list,
+                v_list, 
+                w_list,
+                n_lower_boundary_list,
+                n_upper_boundary_list,
+                error_n_list,
+                m_lower_boundary_list,
+                m_upper_boundary_list,
+                error_m_list,
+                n_list,
+                m_list,
+                distance_list,
+                angle_list
+                ]
+    file = open('.csv','w+',newline='')
+    with file:
+        write = csv.writer(file)
+        write.writerows(file_data)
+"""

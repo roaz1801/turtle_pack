@@ -39,7 +39,7 @@ class move_bot:
         d_con = 2.8 #Lengde der kamera slutter å merke marker, må finne og justere denne.
         l = 0.1
         K_d = 0.3
-        K_beta = 0.7
+        K_beta = 1
         rho_d_inf = 0.4 #Steady state error på distance
         rho_beta_inf = 15 #Steady state error på vinkel
 
@@ -266,7 +266,7 @@ if __name__ == '__main__':
     figure.suptitle('Angle and distance between follower and leader', fontsize=16)
     
     plt.show()
-  
+
 """
     file_data = [time_list,
                 v_list, 
@@ -280,8 +280,8 @@ if __name__ == '__main__':
                 distance_list,
                 angle_list
                 ]
-    file = open('csv','w+',newline='')
+    file = open('.csv','w+',newline='')
     with file:
         write = csv.writer(file)
         write.writerows(file_data)
- """
+"""
